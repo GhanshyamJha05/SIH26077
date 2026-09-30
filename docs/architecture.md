@@ -69,8 +69,9 @@ flowchart TD
 
     subgraph S7 ["🚀 7. DISSEMINATION"]
         direction LR
-        S(("REST API")):::action
-        T(("GIS Dashboard")):::action
+        S(("REST API\n(Backend)")):::action
+        T(("GIS Dashboard\n(Frontend)")):::action
+        U(("Alert Signals\n(SDMA/SMS)")):::action
     end
 
     A & B & C --> E
@@ -89,7 +90,8 @@ flowchart TD
     PV --> Q & R
     D --> R
     
-    Q & R --> S & T
+    Q & R --> S
+    S --> T & U
 ```
 
 ---
