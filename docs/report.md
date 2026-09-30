@@ -280,80 +280,88 @@ Web GIS Dashboard + REST API (Authorities, Responders, Communities)
 ### Detailed Architecture Diagram
 ```mermaid
 flowchart LR
-    %% Global Styling
-    classDef dataNode fill:#f0f8ff,stroke:#0077b6,stroke-width:2px,color:#000,rx:8,ry:8;
-    classDef engineNode fill:#f1faee,stroke:#2a9d8f,stroke-width:2px,color:#000,rx:8,ry:8;
-    classDef aiCore fill:#f3e8ff,stroke:#7209b7,stroke-width:3px,color:#000,rx:15,ry:15;
-    classDef hazard fill:#fff3e0,stroke:#e76f51,stroke-width:2px,color:#000,rx:5,ry:5;
-    classDef outputNode fill:#1d3557,stroke:#fff,stroke-width:2px,color:#fff,rx:8,ry:8;
-    classDef xaiNode fill:#ffecd1,stroke:#fca311,stroke-width:2px,color:#000,stroke-dasharray: 5 5;
+    %% Neon Dark Theme Styling
+    classDef data fill:#0d1117,stroke:#58a6ff,stroke-width:2px,color:#58a6ff,rx:10,ry:10;
+    classDef engine fill:#0d1117,stroke:#3fb950,stroke-width:2px,color:#3fb950,rx:10,ry:10;
+    classDef ai fill:#1f6feb,stroke:#58a6ff,stroke-width:3px,color:#ffffff,rx:15,ry:15,font-weight:bold;
+    classDef aiFallback fill:#0d1117,stroke:#8957e5,stroke-width:2px,color:#8957e5,rx:15,ry:15,stroke-dasharray: 5 5;
+    classDef hazard fill:#0d1117,stroke:#ff7b72,stroke-width:2px,color:#ff7b72,rx:5,ry:5;
+    classDef context fill:#0d1117,stroke:#d29922,stroke-width:2px,color:#d29922,rx:8,ry:8;
+    classDef action fill:#238636,stroke:#3fb950,stroke-width:3px,color:#ffffff,rx:20,ry:20,font-weight:bold;
+    classDef hub fill:#0d1117,stroke:#8b949e,stroke-width:1px,color:#8b949e,rx:50,ry:50;
 
-    subgraph S1 ["🌍 1. INGESTION"]
+    subgraph S1 ["🛰️ 1. INGESTION"]
         direction TB
-        A["🛰️ INSAT-3D/3DR"]:::dataNode
-        B["🌦️ IMDAA Reanalysis"]:::dataNode
-        C["🌧️ QPE Radar"]:::dataNode
-        D["⛰️ CartoDEM"]:::dataNode
+        A["INSAT-3D/3DR"]:::data
+        B["IMDAA Reanalysis"]:::data
+        C["QPE Radar"]:::data
+        D["CartoDEM (ISRO)"]:::data
     end
 
     subgraph S2 ["⚙️ 2. FUSION PIPELINE"]
         direction TB
-        E["🔄 Ingestion Service"]:::engineNode
-        F["⏳ Temporal Interpolation"]:::engineNode
-        G["🗺️ Fine-Grid Sync"]:::engineNode
-        
+        E["Ingestion Service"]:::engine
+        F["Temporal Sync"]:::engine
+        G["Grid Alignment"]:::engine
         E --> F --> G
     end
 
-    subgraph S3 ["🔍 3. FEATURE ENGINE"]
+    subgraph S3 ["🔍 3. METRICS"]
         direction TB
-        H["💧 Moisture / IWV"]:::engineNode
-        I["🌪️ Instability (CAPE)"]:::engineNode
-        J["🌬️ Lift & Shear"]:::engineNode
-        K["❄️ Cloud-Top Cooling"]:::engineNode
+        H["Moisture / IWV"]:::engine
+        I["Instability (CAPE)"]:::engine
+        J["Lift & Shear"]:::engine
+        K["Cloud Cooling"]:::engine
     end
 
-    subgraph S4 ["🧠 4. SPATIOTEMPORAL AI CORE"]
+    %% Hub to group features
+    FV(("Feature\nVector")):::hub
+
+    subgraph S4 ["🧠 4. AI CORE"]
         direction TB
-        L{"🌲 XGBoost\n(Fallback)"}:::aiCore
-        M{"🚀 Multi-Task Transformer\n(Primary)"}:::aiCore
+        M{"Multi-Task\nTransformer"}:::ai
+        L{"XGBoost\n(Fallback)"}:::aiFallback
     end
 
     subgraph S5 ["⚠️ 5. PREDICTION"]
         direction TB
-        N["⚡ Thunderstorm"]:::hazard
-        O["🌧️ Cloudburst"]:::hazard
-        P["🌊 Flash Flood"]:::hazard
+        N["Thunderstorm"]:::hazard
+        O["Cloudburst"]:::hazard
+        P["Flash Flood"]:::hazard
     end
 
-    subgraph S6 ["💡 6. CONTEXT LAYER"]
+    %% Hub to group predictions
+    PV(("Risk\nOutput")):::hub
+
+    subgraph S6 ["💡 6. CONTEXT"]
         direction TB
-        Q["🧠 SHAP XAI Engine\n(Extracts Trigger)"]:::xaiNode
-        R["🗺️ Terrain Overlay\n(Maps to Slopes)"]:::xaiNode
+        Q["SHAP Trigger"]:::context
+        R["Terrain Overlay"]:::context
     end
 
     subgraph S7 ["🚀 7. DISSEMINATION"]
         direction TB
-        S["🚨 Alert Engine"]:::outputNode
-        T["💻 GIS Dashboard"]:::outputNode
-        U["🔌 REST API"]:::outputNode
+        S(("REST API")):::action
+        T(("GIS Dashboard")):::action
     end
 
-    %% Routing
     A & B & C --> E
     G --> H & I & J & K
     
-    H & I & J & K --> L & M
+    H & I & J & K --> FV
     
-    L -.->|Baseline| N & O & P
-    M ==>|Targeted| N & O & P
+    FV ==> M
+    FV -.-> L
     
-    N & O & P --> Q
-    N & O & P --> R
+    M ==> N & O & P
+    L -.-> N & O & P
+    
+    N & O & P --> PV
+    
+    PV --> Q & R
     D --> R
     
-    Q & R --> S
-    S --> T & U
+    Q & R --> S & T
 ```
 
 ---
