@@ -1,18 +1,10 @@
 # 🏛️ HYPERCAST: System Architecture
 
-This document details the end-to-end technical architecture of the HYPERCAST AI-Driven Hyper-Local Early Warning System.
-
-## 1. High-Level Concept
-
-<p align="center">
-  <img src="../assets/architecture/hypercast_architecture.jpg" alt="HYPERCAST Architecture Diagram" width="100%">
-</p>
-
 HYPERCAST is designed to ingest multi-modal, asynchronous weather data, align it into a single spatiotemporal grid, extract thermodynamic features, and run a multi-task AI model to predict Thunderstorms, Cloudbursts, and Flash Floods simultaneously.
 
 ---
 
-## 2. Detailed Technical Flow
+
 
 ```mermaid
 flowchart TD
