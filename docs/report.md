@@ -283,19 +283,19 @@ Web GIS Dashboard + REST API (Authorities, Responders, Communities)
 
 ### Detailed Architecture Diagram
 ```mermaid
-flowchart LR
-    %% Neon Dark Theme Styling
-    classDef data fill:#0d1117,stroke:#58a6ff,stroke-width:2px,color:#58a6ff,rx:10,ry:10;
-    classDef engine fill:#0d1117,stroke:#3fb950,stroke-width:2px,color:#3fb950,rx:10,ry:10;
-    classDef ai fill:#1f6feb,stroke:#58a6ff,stroke-width:3px,color:#ffffff,rx:15,ry:15,font-weight:bold;
-    classDef aiFallback fill:#0d1117,stroke:#8957e5,stroke-width:2px,color:#8957e5,rx:15,ry:15,stroke-dasharray: 5 5;
-    classDef hazard fill:#0d1117,stroke:#ff7b72,stroke-width:2px,color:#ff7b72,rx:5,ry:5;
-    classDef context fill:#0d1117,stroke:#d29922,stroke-width:2px,color:#d29922,rx:8,ry:8;
-    classDef action fill:#238636,stroke:#3fb950,stroke-width:3px,color:#ffffff,rx:20,ry:20,font-weight:bold;
-    classDef hub fill:#0d1117,stroke:#8b949e,stroke-width:1px,color:#8b949e,rx:50,ry:50;
+flowchart TD
+    %% Neon Dark Theme Styling with Font Size for Readability
+    classDef data fill:#0d1117,stroke:#58a6ff,stroke-width:2px,color:#58a6ff,rx:10,ry:10,font-size:16px;
+    classDef engine fill:#0d1117,stroke:#3fb950,stroke-width:2px,color:#3fb950,rx:10,ry:10,font-size:16px;
+    classDef ai fill:#1f6feb,stroke:#58a6ff,stroke-width:3px,color:#ffffff,rx:15,ry:15,font-weight:bold,font-size:16px;
+    classDef aiFallback fill:#0d1117,stroke:#8957e5,stroke-width:2px,color:#8957e5,rx:15,ry:15,stroke-dasharray: 5 5,font-size:14px;
+    classDef hazard fill:#0d1117,stroke:#ff7b72,stroke-width:2px,color:#ff7b72,rx:5,ry:5,font-size:16px;
+    classDef context fill:#0d1117,stroke:#d29922,stroke-width:2px,color:#d29922,rx:8,ry:8,font-size:16px;
+    classDef action fill:#238636,stroke:#3fb950,stroke-width:3px,color:#ffffff,rx:20,ry:20,font-weight:bold,font-size:16px;
+    classDef hub fill:#0d1117,stroke:#8b949e,stroke-width:1px,color:#8b949e,rx:50,ry:50,font-size:14px;
 
     subgraph S1 ["🛰️ 1. INGESTION"]
-        direction TB
+        direction LR
         A["INSAT-3D/3DR"]:::data
         B["IMDAA Reanalysis"]:::data
         C["QPE Radar"]:::data
@@ -303,7 +303,7 @@ flowchart LR
     end
 
     subgraph S2 ["⚙️ 2. FUSION PIPELINE"]
-        direction TB
+        direction LR
         E["Ingestion Service"]:::engine
         F["Temporal Sync"]:::engine
         G["Grid Alignment"]:::engine
@@ -311,7 +311,7 @@ flowchart LR
     end
 
     subgraph S3 ["🔍 3. METRICS"]
-        direction TB
+        direction LR
         H["Moisture / IWV"]:::engine
         I["Instability (CAPE)"]:::engine
         J["Lift & Shear"]:::engine
@@ -322,13 +322,13 @@ flowchart LR
     FV(("Feature\nVector")):::hub
 
     subgraph S4 ["🧠 4. AI CORE"]
-        direction TB
+        direction LR
         M{"Multi-Task\nTransformer"}:::ai
         L{"XGBoost\n(Fallback)"}:::aiFallback
     end
 
     subgraph S5 ["⚠️ 5. PREDICTION"]
-        direction TB
+        direction LR
         N["Thunderstorm"]:::hazard
         O["Cloudburst"]:::hazard
         P["Flash Flood"]:::hazard
@@ -338,13 +338,13 @@ flowchart LR
     PV(("Risk\nOutput")):::hub
 
     subgraph S6 ["💡 6. CONTEXT"]
-        direction TB
+        direction LR
         Q["SHAP Trigger"]:::context
         R["Terrain Overlay"]:::context
     end
 
     subgraph S7 ["🚀 7. DISSEMINATION"]
-        direction TB
+        direction LR
         S(("REST API")):::action
         T(("GIS Dashboard")):::action
     end
