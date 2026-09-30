@@ -279,63 +279,74 @@ Web GIS Dashboard + REST API (Authorities, Responders, Communities)
 
 ### Detailed Architecture Diagram
 ```mermaid
-graph TD
-    classDef input fill:#e1f5fe,stroke:#0288d1,stroke-width:2px;
-    classDef process fill:#e8f5e9,stroke:#388e3c,stroke-width:2px;
-    classDef ai fill:#ede7f6,stroke:#673ab7,stroke-width:2px;
-    classDef output fill:#fff3e0,stroke:#f57c00,stroke-width:2px;
+flowchart LR
+    %% Global Styling
+    classDef dataNode fill:#f0f8ff,stroke:#0077b6,stroke-width:2px,color:#000,rx:8,ry:8;
+    classDef engineNode fill:#f1faee,stroke:#2a9d8f,stroke-width:2px,color:#000,rx:8,ry:8;
+    classDef aiCore fill:#f3e8ff,stroke:#7209b7,stroke-width:3px,color:#000,rx:15,ry:15;
+    classDef hazard fill:#fff3e0,stroke:#e76f51,stroke-width:2px,color:#000,rx:5,ry:5;
+    classDef outputNode fill:#1d3557,stroke:#fff,stroke-width:2px,color:#fff,rx:8,ry:8;
+    classDef xaiNode fill:#ffecd1,stroke:#fca311,stroke-width:2px,color:#000,stroke-dasharray: 5 5;
 
-    subgraph DATA_SOURCES ["1. Data Sources"]
-        A["INSAT-3D/3DR"]:::input
-        B["IMDAA Reanalysis"]:::input
-        C["QPE Estimates"]:::input
-        D["CartoDEM / SRTM"]:::input
-        E["Historical Events"]:::input
+    subgraph S1 ["🌍 1. INGESTION"]
+        direction TB
+        A["🛰️ INSAT-3D/3DR"]:::dataNode
+        B["🌦️ IMDAA Reanalysis"]:::dataNode
+        C["🌧️ QPE Radar"]:::dataNode
+        D["⛰️ CartoDEM"]:::dataNode
     end
 
-    subgraph PREPROCESSING ["2. Data Pipeline"]
-        F["Data Ingestion"]:::process
-        G["Spatial + Temporal Alignment"]:::process
-        F --> G
+    subgraph S2 ["⚙️ 2. FUSION PIPELINE"]
+        direction TB
+        E["🔄 Ingestion Service"]:::engineNode
+        F["⏳ Temporal Interpolation"]:::engineNode
+        G["🗺️ Fine-Grid Sync"]:::engineNode
+        
+        E --> F --> G
     end
 
-    subgraph FEATURE_ENG ["3. Feature Engineering"]
-        H["Moisture / IWV"]:::process
-        I["Instability (CAPE/CIN)"]:::process
-        J["Lift & Wind Shear"]:::process
-        K["Cloud-Top Cooling"]:::process
+    subgraph S3 ["🔍 3. FEATURE ENGINE"]
+        direction TB
+        H["💧 Moisture / IWV"]:::engineNode
+        I["🌪️ Instability (CAPE)"]:::engineNode
+        J["🌬️ Lift & Shear"]:::engineNode
+        K["❄️ Cloud-Top Cooling"]:::engineNode
     end
 
-    subgraph AI_LAYER ["4. AI / ML Layer"]
-        L["Tree-Based Baseline"]:::ai
-        M["Multi-Task Transformer"]:::ai
-    end
-    
-    subgraph PREDICTIONS ["5. Hazard Predictions"]
-        N["Thunderstorm Risk"]:::ai
-        O["Cloudburst Risk"]:::ai
-        P["Flash Flood Risk"]:::ai
+    subgraph S4 ["🧠 4. SPATIOTEMPORAL AI CORE"]
+        direction TB
+        L{"🌲 XGBoost\n(Fallback)"}:::aiCore
+        M{"🚀 Multi-Task Transformer\n(Primary)"}:::aiCore
     end
 
-    subgraph CONTEXT ["6. Explainability & Mapping"]
-        Q["SHAP-style XAI Reasoning"]:::process
-        R["DEM Terrain Overlay"]:::process
+    subgraph S5 ["⚠️ 5. PREDICTION"]
+        direction TB
+        N["⚡ Thunderstorm"]:::hazard
+        O["🌧️ Cloudburst"]:::hazard
+        P["🌊 Flash Flood"]:::hazard
     end
 
-    subgraph DISSEMINATION ["7. Outputs"]
-        S["Risk Maps + Alert Engine"]:::output
-        T["Web GIS Dashboard"]:::output
-        U["REST API"]:::output
-        V["Authorities / Responders / Communities"]:::output
+    subgraph S6 ["💡 6. CONTEXT LAYER"]
+        direction TB
+        Q["🧠 SHAP XAI Engine\n(Extracts Trigger)"]:::xaiNode
+        R["🗺️ Terrain Overlay\n(Maps to Slopes)"]:::xaiNode
     end
 
-    A & B & C --> F
-    E -.->|Training Data| M
-    
+    subgraph S7 ["🚀 7. DISSEMINATION"]
+        direction TB
+        S["🚨 Alert Engine"]:::outputNode
+        T["💻 GIS Dashboard"]:::outputNode
+        U["🔌 REST API"]:::outputNode
+    end
+
+    %% Routing
+    A & B & C --> E
     G --> H & I & J & K
+    
     H & I & J & K --> L & M
     
-    L & M --> N & O & P
+    L -.->|Baseline| N & O & P
+    M ==>|Targeted| N & O & P
     
     N & O & P --> Q
     N & O & P --> R
@@ -343,7 +354,6 @@ graph TD
     
     Q & R --> S
     S --> T & U
-    T & U --> V
 ```
 
 ---
