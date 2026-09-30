@@ -105,11 +105,11 @@ There is a critical lack of a unified, fast, hyper-local, and terrain-aware nowc
 ## 3. PROPOSED SOLUTION
 
 ### 3.1 Overview
-HYPERCAST is a proposed AI-driven hyper-local multi-hazard early warning and nowcasting system designed specifically for hilly regions. It bypasses slow traditional weather models by utilizing live satellite data, reanalysis products, and rainfall estimates to feed a multi-task AI architecture that predicts thunderstorms, cloudbursts, and flash floods simultaneously, with a 2–6 hour lead time.
+HYPERCAST is a proposed AI-driven hyper-local multi-hazard early warning and nowcasting system designed specifically for hilly regions. It bypasses slow traditional weather models by utilizing live satellite data, reanalysis products, and rainfall estimates to feed a multi-task AI architecture that predicts thunderstorms, cloudbursts, and flash floods simultaneously, with a targeted 2–6 hour lead time.
 
 ### 3.2 Design Goals
 * Process data rapidly to provide actionable warnings 2–6 hours before onset.
-* Achieve hyper-local precision at the village or ward level.
+* Achieve high-resolution precision on a regional grid (aiming for sub-district targeting).
 * Unify the prediction of connected hazards.
 * Maintain transparency and build trust through explainable AI (XAI).
 * Ensure scalability and low deployment cost by utilizing free, public data without requiring dense sensor networks.
@@ -150,7 +150,7 @@ The datasets include geostationary satellite imagery, gridded atmospheric reanal
 All incoming data is mapped onto a single common fine spatial map grid. This is critical because satellite imagery, reanalysis data, and terrain models have differing native resolutions. 
 
 ### 4.4 Temporal Alignment
-Because satellite, rainfall, and reanalysis data arrive at different times and frequencies, the pipeline aligns all data to a single unified timestamp before it is presented to the AI model.
+Because satellite, rainfall, and reanalysis data arrive at different times and frequencies, the pipeline will utilize temporal interpolation to align all asynchronous data to a single unified timestamp before it is presented to the AI model.
 
 ### 4.5 Data Fusion
 The data fusion engine integrates the spatially and temporally aligned matrices into a single multi-dimensional tensor. This unified structure ensures that the AI model can simultaneously assess the terrain context along with current atmospheric and rainfall conditions.
@@ -191,7 +191,7 @@ The feature engine is designed to extract critical "storm warning signs."
 ## 6. AI / ML ARCHITECTURE
 
 ### 6.1 Model Overview
-The proposed architecture features a multi-task spatiotemporal transformer. Because large AI models can be slow and costly to run, a tree-based baseline is proposed as a starting point.
+A multi-task spatiotemporal AI architecture, initially baselined on tree-based models (XGBoost/LightGBM) and scaling to a transformer network, is proposed to forecast these interconnected hazards.
 
 ### 6.2 Tree-Based Baseline
 * **Purpose:** Serves as a computationally light fallback and the initial step in the "software-first build" approach.
@@ -412,7 +412,7 @@ Explainability is built-in from day one, ensuring that the system produces outpu
 
 | Challenge | Impact | Proposed Mitigation |
 | --- | --- | --- |
-| **Rare-event imbalance** | Cloudbursts are rare, so a model may learn to ignore them. | Test on real past events and give rare events extra weight in training. |
+| **Rare-event imbalance** | Cloudbursts are rare, so a model may learn to ignore them. | Test on real past events and give rare events extra weight utilizing techniques like Focal Loss and physics-informed data augmentation. |
 | **Data out of sync in time** | Satellite, rainfall, and reanalysis data arrive at different times. | Put all data on one grid and one timestamp before the model sees it. |
 | **False alarms vs. missed alerts** | Too many false alarms lose trust. Misses cost lives. | Show a confidence level with each alert, along with the reason behind it. |
 | **High compute for full transformer**| Large AI models can be slow and costly to run. | Keep the tree-based baseline as a fallback that still gives warnings. |
@@ -439,8 +439,8 @@ Achieving a usable lead time within a 2–6 hour window, providing enough time f
 ## 17. EXPECTED OUTCOMES
 
 The implementation of HYPERCAST is expected to deliver:
-* **Earlier warnings:** Providing a 2–6 hour window for action.
-* **Fine-grid risk:** Localization to the village/ward level.
+* **Earlier warnings:** Targeting a 2–6 hour window for action.
+* **Fine-grid risk:** Localization mapped to a high-resolution regional grid.
 * **Multi-hazard outputs:** Simultaneous 3-in-1 prediction of storms, cloudbursts, and flash floods.
 * **Explainability:** Clear, meteorologically sound reasons for every alert.
 * **Terrain awareness:** Ground-impact mapping based on slopes and valleys.
@@ -489,6 +489,7 @@ Based on the proposal constraints, explicit limitations include:
 * **Limited Labelled History:** There is a scarcity of well-documented, high-resolution historical events to learn from.
 * **Data Synchronization:** Maintaining strict temporal and spatial alignment of asynchronous data sources in real-time is complex.
 * **Compute Requirements:** The full spatiotemporal transformer poses high compute costs for inference, necessitating the tree-based fallback.
+* **Antecedent Factors:** Flash floods depend heavily on soil moisture and prior rainfall, which are not currently explicitly modelled, creating a potential gap in flood accuracy.
 * **False Positives/Negatives:** The ongoing tension between false alarms (eroding trust) and missed alerts (costing lives) requires constant threshold tuning.
 
 ---
@@ -507,7 +508,7 @@ The proposed future scope encompasses:
 ## 22. NOVELTY / DIFFERENTIATION
 
 HYPERCAST differentiates itself through:
-* **Hyper-local forecasting:** Village-level precision rather than broad district warnings.
+* **High-resolution forecasting:** Aiming for sub-district targeting rather than broad district warnings.
 * **Multi-hazard prediction:** Linking storm, rain, and flood into a unified causal chain.
 * **Terrain-aware risk:** Mapping atmospheric threat directly to ground topography.
 * **Explainable alerts:** Naming the exact trigger for transparency.
