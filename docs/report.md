@@ -547,17 +547,24 @@ HYPERCAST differentiates itself through:
 Proposed repository structure for HYPERCAST implementation:
 
 ```text
-hypercast/
-├── frontend/        # React.js Web GIS Dashboard
-├── backend/         # Node.js/Python REST API for alerts
-├── ai-service/      # Python inference service (Transformer & Tree-based models)
-├── models/          # Saved model weights and architecture definitions
-├── data/            # Data ingestion scripts (MOSDAC, IMDAA, QPE, CartoDEM)
-├── notebooks/       # Jupyter notebooks for EDA and historical event replay
-├── docs/            # Project reports, architecture diagrams (like this file)
-├── scripts/         # Spatial/temporal alignment and feature engineering scripts
-├── README.md        # Project overview
-└── LICENSE          # Open-source license
+SIH26077/
+│
+├── README.md              ← "Understand HYPERCAST in 2–3 minutes"
+│
+├── docs/
+│   └── report.md          ← "Understand the entire technical proposal"
+│
+├── assets/                ← Project visuals, mockups, and diagrams
+│   ├── architecture/
+│   ├── dashboard/
+│   └── risk-map/
+│
+├── frontend/              ← React.js Web GIS Dashboard (Planned)
+├── backend/               ← Node.js/Python REST API for alerts (Planned)
+├── ai-service/            ← Python inference service (Transformer & XGBoost)
+├── data/                  ← Data ingestion scripts (MOSDAC, IMDAA, CartoDEM)
+├── models/                ← Saved model weights and definitions
+└── tests/                 ← System validation and evaluation
 ```
 
 ---

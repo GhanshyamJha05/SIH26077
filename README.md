@@ -68,10 +68,23 @@ Our **validation strategy** involves **replaying the Aug 2023 Himachal Pradesh f
 
 ```text
 SIH26077/
-├── README.md              ← You are here
-├── ARCHITECTURE.md        ← Technical architecture & system flowchart
-└── docs/
-    └── report.md          ← Full project report (problem, solution, feasibility, impact)
+│
+├── README.md              ← "Understand HYPERCAST in 2–3 minutes"
+│
+├── docs/
+│   └── report.md          ← "Understand the entire technical proposal"
+│
+├── assets/                ← Project visuals, mockups, and diagrams
+│   ├── architecture/
+│   ├── dashboard/
+│   └── risk-map/
+│
+├── frontend/              ← React.js Web GIS Dashboard (Planned)
+├── backend/               ← Node.js/Python REST API for alerts (Planned)
+├── ai-service/            ← Python inference service (Transformer & XGBoost)
+├── data/                  ← Data ingestion scripts (MOSDAC, IMDAA, CartoDEM)
+├── models/                ← Saved model weights and definitions
+└── tests/                 ← System validation and evaluation
 ```
 
 ## 📖 Documentation
