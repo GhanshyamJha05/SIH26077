@@ -76,7 +76,8 @@ SIH26077/
 ├── README.md              ← "Understand HYPERCAST in 2–3 minutes"
 │
 ├── docs/
-│   └── report.md          ← "Understand the entire technical proposal"
+│   ├── report.md          ← "Understand the entire technical proposal"
+│   └── architecture.md    ← "Deep dive into system & software design"
 │
 ├── assets/                ← Project visuals, mockups, and diagrams
 │   ├── architecture/
@@ -96,7 +97,7 @@ SIH26077/
 | Document | Description |
 | :--- | :--- |
 | [**📋 Project Report**](./docs/report.md) | Complete report covering problem, solution, methodology, feasibility, validation, impact, and references. |
-| [**🏛️ Architecture**](./ARCHITECTURE.md) | Technical architecture with Mermaid flowchart and detailed technology stack. |
+| [**🏛️ System Architecture**](./docs/architecture.md) | Dedicated deep dive into the technical pipeline, AI models, and software stack. |
 
 ## 🌍 Anticipated Impact
 

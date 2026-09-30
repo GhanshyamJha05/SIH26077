@@ -564,7 +564,8 @@ SIH26077/
 ├── README.md              ← "Understand HYPERCAST in 2–3 minutes"
 │
 ├── docs/
-│   └── report.md          ← "Understand the entire technical proposal"
+│   ├── report.md          ← "Understand the entire technical proposal"
+│   └── architecture.md    ← "Deep dive into system & software design"
 │
 ├── assets/                ← Project visuals, mockups, and diagrams
 │   ├── architecture/
