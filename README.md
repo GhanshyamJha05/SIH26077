@@ -28,6 +28,10 @@ Cloudbursts and flash floods in hilly regions kill hundreds every year. Current 
 
 ## 💡 Our Proposed Solution
 
+<p align="center">
+  <img src="./assets/architecture/hypercast_architecture.jpg" alt="HYPERCAST Architecture Diagram" width="100%">
+</p>
+
 Hypercast addresses these gaps through a **planned 5-step pipeline**:
 
 1. **Fusing live data** — Satellite (INSAT-3D), weather (IMDAA), rainfall (QPE), and terrain (CartoDEM) on one grid.

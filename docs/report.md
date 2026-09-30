@@ -258,6 +258,10 @@ By utilizing one shared model backbone that learns these linked hazards, the sys
 
 ## 10. SYSTEM ARCHITECTURE
 
+<p align="center">
+  <img src="../assets/architecture/hypercast_architecture.jpg" alt="HYPERCAST Architecture Diagram" width="100%">
+</p>
+
 ### High-Level Flow
 ```
 INSAT / IMDAA / QPE / DEM / Historical Events
