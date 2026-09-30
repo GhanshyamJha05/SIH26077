@@ -13,27 +13,27 @@ graph TD
     classDef output fill:#fff3e0,stroke:#f57c00,stroke-width:2px,color:#000;
 
     subgraph INPUT ["1. INPUT (What we feed in)"]
-        A[INSAT-3D/3DR Satellite<br/>Sees storm clouds growing fast]:::input
-        B[IMDAA Reanalysis<br/>Air moisture, instability, wind]:::input
-        C[QPE Rainfall Estimates<br/>Extreme intensity now]:::input
-        D[DEM Terrain CartoDEM<br/>Slopes and river channels]:::input
-        E[Past Event Records<br/>Aug 2023 Himachal floods]:::input
+        A["INSAT-3D/3DR Satellite<br/>Sees storm clouds growing fast"]:::input
+        B["IMDAA Reanalysis<br/>Air moisture, instability, wind"]:::input
+        C["QPE Rainfall Estimates<br/>Extreme intensity now"]:::input
+        D["DEM Terrain CartoDEM<br/>Slopes and river channels"]:::input
+        E["Past Event Records<br/>Aug 2023 Himachal floods"]:::input
     end
 
     subgraph PROCESSING ["2. PROCESSING (How the system thinks)"]
-        F[Align and fuse<br/>All data on one grid and one timestamp]:::process
+        F["Align and fuse<br/>All data on one grid and one timestamp"]:::process
         
         subgraph FeatureEngine ["Feature Engine: Storm Warning Signs"]
-            G[Moisture IWV]:::process
-            H[Instability CAPE/CIN]:::process
-            I[Lift + wind shear]:::process
-            J[Cloud-top cooling]:::process
+            G["Moisture IWV"]:::process
+            H["Instability CAPE/CIN"]:::process
+            I["Lift + wind shear"]:::process
+            J["Cloud-top cooling"]:::process
         end
         
-        K{Multi-task spatiotemporal transformer<br/>Thunderstorm | Cloudburst | Flash flood risk}:::process
+        K{"Multi-task spatiotemporal transformer<br/>Thunderstorm, Cloudburst, Flash flood risk"}:::process
         
-        L[XAI reasoning<br/>Names the trigger]:::process
-        M[DEM terrain overlay<br/>Maps ground impact]:::process
+        L["XAI reasoning<br/>Names the trigger"]:::process
+        M["DEM terrain overlay<br/>Maps ground impact"]:::process
         
         F --> G & H & I & J
         G & H & I & J --> K
@@ -42,9 +42,9 @@ graph TD
     end
 
     subgraph OUTPUT ["3. OUTPUT (What comes out)"]
-        N[Hazard risk maps + reasons<br/>On a fine grid]:::output
-        O[Web GIS dashboard<br/>Live risk layers, history]:::output
-        P[REST API alerts<br/>Warnings 2-6 h before onset]:::output
+        N["Hazard risk maps + reasons<br/>On a fine grid"]:::output
+        O["Web GIS dashboard<br/>Live risk layers, history"]:::output
+        P["REST API alerts<br/>Warnings 2-6 h before onset"]:::output
     end
 
     A & B & C --> F
